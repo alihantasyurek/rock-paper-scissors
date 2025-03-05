@@ -1,6 +1,8 @@
+const maxRounds = 5;
 const choices = ["rock", "paper", "scissors"]
 let humanScore = 0;
 let computerScore = 0;
+
 
 
 alert("The game is played through the console press F12 and click on console before starting, The game also will be 5 rounds. Good luck have fun!")
@@ -59,8 +61,21 @@ function playRound(humanChoice, computerChoice) {
   console.log(`Your score: ${humanScore} Computer's score: ${computerScore} `)
 }
 
-for (let i = 0; i < 5; i++) {
+function printWinner() {
+  console.log(`Final Score -> You: ${humanScore} | Computer: ${computerScore}`);
+  if (humanScore > computerScore) {
+    console.log("🎉 Congratulations! You won the game!");
+  } else if (computerScore > humanScore) {
+    console.log("😞 Sorry, you lost the game.");
+  } else {
+    console.log("🤝 It's a tie game!");
+  }
+}
+
+for (let i = 0; i < maxRounds; i++) {
   let humanChoice = getValidHumanInput();
   let computerChoice = getComputerChoice();
   playRound(humanChoice, computerChoice);
 }
+
+console.log(printWinner())
