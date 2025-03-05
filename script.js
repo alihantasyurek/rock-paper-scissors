@@ -43,9 +43,12 @@ function capitilize(str) {
 
 // The actual game
 function playRound(humanChoice, computerChoice) {
+
+  console.log(`🧑 You: ${capitilize(humanChoice)} vs 🤖 Computer: ${capitilize(computerChoice)}`);
   // you either win or lose or draw
   if (humanChoice == computerChoice) {
     console.log("It's a tie!")
+    console.log()
     return;
   }
 
@@ -58,7 +61,8 @@ function playRound(humanChoice, computerChoice) {
     console.log(`You lose! ${capitilize(computerChoice)} beats ${capitilize(humanChoice)}`)
     computerScore++;
   }
-  console.log(`Your score: ${humanScore} Computer's score: ${computerScore} `)
+  console.log(`Your score: ${humanScore} Computer score: ${computerScore}`)
+  console.log()
 }
 
 function printWinner() {
@@ -78,4 +82,4 @@ for (let i = 0; i < maxRounds; i++) {
   playRound(humanChoice, computerChoice);
 }
 
-console.log(printWinner())
+printWinner()
