@@ -12,22 +12,28 @@
 <body>
   <h1>ROCK PAPER SCISSORS</h1>
   <div id="possibility">
-    <button id="rock">Rock</button>
-    <button id="paper">Paper</button>
-    <button id="scissors">Scissors</button>
+    <div id="rock">
+      <img class="choice" data-choice="rock" src="images/rock.png" alt="rock">
+    </div>
+    <div id="paper">
+      <img class="choice" data-choice="paper" src="images/paper.png" alt="paper">
+    </div>
+    <div id="scissors">
+      <img class="choice" data-choice="scissors" src="images/scissors.png" alt="scissors">
+    </div>
   </div>
 
-  <div id="message"></div>
-
-  <div id="choice">
-    <div id="humanChoice"></div>
-    <div id="computerChoice"></div>
+  <div id="message">
+    <div id="info">Choose your sign to start</div>
     <div id="resultMessage"></div>
+    <div id="finalResult"></div>
   </div>
 
-  <div id="finalResult"></div>
+  <button id="playAgainBtn">Play Again!</button>
 
   <div id="result">
+    <h2>SCORES</h2>
+    <p>First to 5 wins!</p>
     <div id="humanScore">🧑 -> 0</div>
     <div id="computerScore">🤖 -> 0</div>
   </div>

@@ -2,6 +2,10 @@ const choices = ["rock", "paper", "scissors"]
 let humanScore = 0;
 let computerScore = 0;
 const MAXPOINT = 5;
+let gameOver = false;
+
+const playAgainBtn = document.querySelector("#playAgainBtn");
+playAgainBtn.classList.toggle("hidden");
 
 function getComputerChoice() {
   rndIndex = Math.floor(Math.random() * 3); // give a random index between 0-2
@@ -15,11 +19,10 @@ function capitilize(str) {
 
 // The actual game
 function playRound(humanChoice, computerChoice) {
+  if (gameOver) return;
+  const info = document.querySelector("#info");
   const resultMessage = document.querySelector("#resultMessage");
-  const showHumanChoice = document.querySelector("#humanChoice");
-  const showComputerChoice = document.querySelector("#computerChoice");
-  showHumanChoice.textContent = `🧑 You: ${capitilize(humanChoice)}`;
-  showComputerChoice.textContent = `🤖 Computer: ${capitilize(computerChoice)}`;
+  info.textContent = `🧑 You: ${capitilize(humanChoice)} | 🤖 Computer: ${capitilize(computerChoice)} `
 
   if (humanChoice == computerChoice) {
     resultMessage.textContent = "It's a tie!";
@@ -37,6 +40,7 @@ function playRound(humanChoice, computerChoice) {
   }
 
   if (humanScore >= MAXPOINT || computerScore >= MAXPOINT) {
+    gameOver = true;
     const finalResult = document.querySelector("#finalResult");
     finalResult.textContent = getWinner();
     playAgain();
@@ -46,14 +50,9 @@ function playRound(humanChoice, computerChoice) {
 
 function playAgain() {
   const buttons = document.querySelectorAll("button");
-  buttons.forEach((elem) => elem.classList.add("hidden"));
-  const playAgain = document.createElement("button");
-  playAgain.textContent = "Play Again?";
-  const choice = document.querySelector("#choice");
-  choice.appendChild(playAgain);
-  playAgain.addEventListener("click", () => {
-    playAgain.remove();
-    buttons.forEach((elem) => elem.classList.remove("hidden"));
+  playAgainBtn.classList.toggle("hidden");
+  playAgainBtn.addEventListener("click", () => {
+    playAgainBtn.classList.toggle("hidden");
     resetGame()
   })
 }
@@ -61,17 +60,18 @@ function playAgain() {
 function resetGame() {
   computerScore = 0;
   humanScore = 0;
-  const result = document.querySelector("#result");
-  result.firstElementChild.textContent = "🧑 -> 0";
-  result.lastElementChild.textContent = "🤖 -> 0";
+  const human = document.querySelector("#humanScore")
+  const computer = document.querySelector("#computerScore")
+
+  human.textContent = "🧑 -> 0";
+  computer.textContent = "🤖 -> 0";
   const resultMessage = document.querySelector("#resultMessage");
   resultMessage.textContent = "";
-  const showHumanChoice = document.querySelector("#humanChoice");
-  showHumanChoice.textContent = "";
-  const showComputerChoice = document.querySelector("#computerChoice");
-  showComputerChoice.textContent = "";
   const finalResult = document.querySelector("#finalResult");
   finalResult.textContent = "";
+  const info = document.querySelector("#info");
+  info.textContent = "Choose your sign to start";
+  gameOver = false;
 }
 
 function getWinner() {
@@ -90,23 +90,19 @@ function getWinner() {
 let humanChoice;
 const possibility = document.querySelector("#possibility");
 possibility.addEventListener("click", (e) => {
-  const id = e.target.id;
-  switch (id) {
-    case "rock":
-      humanChoice = id;
-      break;
-    case "paper":
-      humanChoice = id;
-      break;
-    case "scissors":
-      humanChoice = id;
-      break;
-    default:
-      break;
+  const choice = e.target.dataset.choice;
+  if (!choices.includes(choice)) {
+    return;
   }
+  humanChoice = choice;
   let computerChoice = getComputerChoice();
   playRound(humanChoice, computerChoice);
-  const result = document.querySelector("#result");
-  result.firstElementChild.textContent = "🧑 -> " + humanScore;
-  result.lastElementChild.textContent = "🤖 -> " + computerScore;
+  displayResult();
 });
+
+function displayResult() {
+  const human = document.querySelector("#humanScore")
+  const computer = document.querySelector("#computerScore")
+  human.textContent = "🧑 -> " + humanScore;
+  computer.textContent = "🤖 -> " + computerScore;
+}
