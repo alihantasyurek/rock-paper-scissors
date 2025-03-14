@@ -1,39 +1,11 @@
-const maxRounds = 5;
 const choices = ["rock", "paper", "scissors"]
 let humanScore = 0;
 let computerScore = 0;
+const MAXPOINT = 5;
 
-
-
-alert("The game is played through the console press F12 and click on console before starting, The game also will be 5 rounds. Good luck have fun!")
-
-//getComputerChoice will randomly return: “rock”, “paper” or “scissors”.
 function getComputerChoice() {
   rndIndex = Math.floor(Math.random() * 3); // give a random index between 0-2
   return choices[rndIndex];
-}
-
-//get user input
-function getHumanChoice() {
-  let input = prompt("Choose: Rock, Paper, Scissors")?.trim().toLowerCase();
-  if (input === undefined) {
-    throw new Error("User canceled the prompt");
-  }
-  for (let i = 0; i < 3; i++)
-    if (input === choices[i])
-      return choices[i];
-  return false;
-}
-
-// Eliminate input concerns
-function getValidHumanInput() {
-  let humanChoice = getHumanChoice();
-
-  while (humanChoice === false) {
-    alert("The choice is not available")
-    humanChoice = getHumanChoice();
-  }
-  return humanChoice;
 }
 
 // make the first char upper case
@@ -43,43 +15,98 @@ function capitilize(str) {
 
 // The actual game
 function playRound(humanChoice, computerChoice) {
+  const resultMessage = document.querySelector("#resultMessage");
+  const showHumanChoice = document.querySelector("#humanChoice");
+  const showComputerChoice = document.querySelector("#computerChoice");
+  showHumanChoice.textContent = `🧑 You: ${capitilize(humanChoice)}`;
+  showComputerChoice.textContent = `🤖 Computer: ${capitilize(computerChoice)}`;
 
-  console.log(`🧑 You: ${capitilize(humanChoice)} vs 🤖 Computer: ${capitilize(computerChoice)}`);
-  // you either win or lose or draw
   if (humanChoice == computerChoice) {
-    console.log("It's a tie!")
-    console.log()
+    resultMessage.textContent = "It's a tie!";
     return;
   }
 
   if ((humanChoice === "rock" && computerChoice === "scissors")
     || (humanChoice === "paper" && computerChoice === "rock")
     || (humanChoice === "scissors" && computerChoice === "paper")) {
-    console.log(`You win! ${capitilize(humanChoice)} beats ${capitilize(computerChoice)}`)
+    resultMessage.textContent = `You win! ${capitilize(humanChoice)} beats ${capitilize(computerChoice)} `;
     humanScore++;
   } else {
-    console.log(`You lose! ${capitilize(computerChoice)} beats ${capitilize(humanChoice)}`)
+    resultMessage.textContent = `You lose! ${capitilize(computerChoice)} beats ${capitilize(humanChoice)} `;
     computerScore++;
   }
-  console.log(`Your score: ${humanScore} Computer score: ${computerScore}`)
-  console.log()
-}
 
-function printWinner() {
-  console.log(`Final Score -> You: ${humanScore} | Computer: ${computerScore}`);
-  if (humanScore > computerScore) {
-    console.log("🎉 Congratulations! You won the game!");
-  } else if (computerScore > humanScore) {
-    console.log("😞 Sorry, you lost the game.");
-  } else {
-    console.log("🤝 It's a tie game!");
+  if (humanScore >= MAXPOINT || computerScore >= MAXPOINT) {
+    const finalResult = document.querySelector("#finalResult");
+    finalResult.textContent = getWinner();
+    playAgain();
+    return;
   }
 }
 
-for (let i = 0; i < maxRounds; i++) {
-  let humanChoice = getValidHumanInput();
-  let computerChoice = getComputerChoice();
-  playRound(humanChoice, computerChoice);
+function playAgain() {
+  const buttons = document.querySelectorAll("button");
+  buttons.forEach((elem) => elem.classList.add("hidden"));
+  const playAgain = document.createElement("button");
+  playAgain.textContent = "Play Again?";
+  const choice = document.querySelector("#choice");
+  choice.appendChild(playAgain);
+  playAgain.addEventListener("click", () => {
+    playAgain.remove();
+    buttons.forEach((elem) => elem.classList.remove("hidden"));
+    resetGame()
+  })
 }
 
-printWinner()
+function resetGame() {
+  computerScore = 0;
+  humanScore = 0;
+  const result = document.querySelector("#result");
+  result.firstElementChild.textContent = "🧑 -> 0";
+  result.lastElementChild.textContent = "🤖 -> 0";
+  const resultMessage = document.querySelector("#resultMessage");
+  resultMessage.textContent = "";
+  const showHumanChoice = document.querySelector("#humanChoice");
+  showHumanChoice.textContent = "";
+  const showComputerChoice = document.querySelector("#computerChoice");
+  showComputerChoice.textContent = "";
+  const finalResult = document.querySelector("#finalResult");
+  finalResult.textContent = "";
+}
+
+function getWinner() {
+  let finalScore = "";
+  finalScore += `Final Score -> You: ${humanScore} | Computer: ${computerScore} \n`;
+  if (humanScore > computerScore) {
+    finalScore += "🎉 Congratulations! You won the game!";
+  } else if (computerScore > humanScore) {
+    finalScore += "😞 Sorry, you lost the game.";
+  } else {
+    finalScore += "🤝 It's a tie game!";
+  }
+  return finalScore;
+}
+
+let humanChoice;
+const possibility = document.querySelector("#possibility");
+possibility.addEventListener("click", (e) => {
+  const id = e.target.id;
+  switch (id) {
+    case "rock":
+      humanChoice = id;
+      break;
+    case "paper":
+      humanChoice = id;
+      break;
+    case "scissors":
+      humanChoice = id;
+      break;
+    default:
+      break;
+  }
+  let computerChoice = getComputerChoice();
+  playRound(humanChoice, computerChoice);
+  const result = document.querySelector("#result");
+  result.firstElementChild.textContent = "🧑 -> " + humanScore;
+  result.lastElementChild.textContent = "🤖 -> " + computerScore;
+});
