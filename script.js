@@ -22,7 +22,7 @@ function playRound(humanChoice, computerChoice) {
   if (gameOver) return;
   const info = document.querySelector("#info");
   const resultMessage = document.querySelector("#resultMessage");
-  info.textContent = `🧑 You: ${capitilize(humanChoice)} | 🤖 Computer: ${capitilize(computerChoice)} `
+  info.textContent = `🧑: ${capitilize(humanChoice)} | 🤖: ${capitilize(computerChoice)} `
 
   if (humanChoice == computerChoice) {
     resultMessage.textContent = "It's a tie!";
@@ -50,9 +50,9 @@ function playRound(humanChoice, computerChoice) {
 
 function playAgain() {
   const buttons = document.querySelectorAll("button");
-  playAgainBtn.classList.toggle("hidden");
+  playAgainBtn.classList.remove("hidden");
   playAgainBtn.addEventListener("click", () => {
-    playAgainBtn.classList.toggle("hidden");
+    playAgainBtn.classList.add("hidden");
     resetGame()
   })
 }
